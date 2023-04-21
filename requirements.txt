@@ -1,0 +1,4 @@
+# A simple requirements file
+- torch<2.0.0
+- diffusers
+- wandb
