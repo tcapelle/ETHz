@@ -3,6 +3,6 @@ artifacts/
 wandb/
 
 lora/
-dreambooth/
+dreambooth_lora/
 
 TODO.txt
