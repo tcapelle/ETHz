@@ -1,4 +1,5 @@
 # A simple requirements file
 - torch<2.0.0
-- diffusers
+- diffusers>=0.9.0
 - wandb
+- miniminiai

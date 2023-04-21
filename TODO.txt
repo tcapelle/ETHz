@@ -1,0 +1,1 @@
+- Check how the image_lora script saves the model checkpoint, add that to W&B
