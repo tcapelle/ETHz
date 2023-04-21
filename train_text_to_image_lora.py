@@ -66,7 +66,7 @@ defaults = SimpleNamespace(
     mixed_precision="fp16",
     train_batch_size=4,
     gradient_accumulation_steps=4,
-    max_train_steps=10_000,
+    max_train_steps=100,
     learning_rate=1e-04,
     lr_scheduler="cosine",
     lr_warmup_steps=0,
@@ -195,7 +195,7 @@ def parse_args():
     parser.add_argument(
         "--output_dir",
         type=str,
-        default="sd-model-finetuned-lora",
+        default=defaults.output_dir,
         help="The output directory where the model predictions and checkpoints will be written.",
     )
     parser.add_argument(
@@ -231,7 +231,9 @@ def parse_args():
         help="whether to randomly flip images horizontally",
     )
     parser.add_argument(
-        "--train_batch_size", type=int, default=16, help="Batch size (per device) for the training dataloader."
+        "--train_batch_size", type=int, 
+        default=defaults.train_batch_size, 
+        help="Batch size (per device) for the training dataloader."
     )
     parser.add_argument("--num_train_epochs", type=int, default=100)
     parser.add_argument(
@@ -243,7 +245,7 @@ def parse_args():
     parser.add_argument(
         "--gradient_accumulation_steps",
         type=int,
-        default=1,
+        default=defaults.gradient_accumulation_steps,
         help="Number of updates steps to accumulate before performing a backward/update pass.",
     )
     parser.add_argument(
@@ -321,7 +323,7 @@ def parse_args():
     parser.add_argument(
         "--mixed_precision",
         type=str,
-        default=None,
+        default=defaults.mixed_precision,
         choices=["no", "fp16", "bf16"],
         help=(
             "Whether to use mixed precision. Choose between fp16 and bf16 (bfloat16). Bf16 requires PyTorch >="
@@ -678,7 +680,7 @@ def main():
     if accelerator.is_main_process:
         accelerator.init_trackers(WANDB_PROJECT_NAME, 
                                   config=vars(args),
-                                  init_kwargs={"wandb":dict(group="lora")})
+                                  init_kwargs={"wandb":dict(job_type="training", group="lora")})
 
     # Train!
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
@@ -846,7 +848,12 @@ def main():
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
         unet = unet.to(torch.float32)
-        unet.save_attn_procs(args.output_dir)
+        unet.save_attn_procs(args.output_dir, )
+        # save model checkpoint to wandb Artifact
+        checkpoint_file = os.path.join(args.output_dir, "pytorch_lora_weights.bin")
+        model_at = wandb.Artifact(f"{wandb.run.id}_lora", type="model")
+        model_at.add_file(checkpoint_file)
+        wandb.log_artifact(model_at)
 
         if args.push_to_hub:
             save_model_card(

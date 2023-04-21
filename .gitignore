@@ -1,0 +1,8 @@
+
+artifacts/
+wandb/
+
+lora/
+dreambooth/
+
+TODO.txt

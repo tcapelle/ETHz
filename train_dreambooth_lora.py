@@ -71,11 +71,11 @@ defaults = SimpleNamespace(
     instance_data_dir=INSTANCE_DIR,
     output_dir=OUTPUT_DIR,
     instance_prompt="a photo of sks dog",
-    mixed_precision=None,
+    mixed_precision="fp16",
     train_batch_size=4,
     gradient_accumulation_steps=4,
     checkpointing_steps=100,
-    max_train_steps=700,
+    max_train_steps=100,
     learning_rate=1e-4,
     lr_scheduler="constant",
     lr_warmup_steps=0,
@@ -235,7 +235,7 @@ def parse_args(input_args=None):
         default=defaults.output_dir,
         help="The output directory where the model predictions and checkpoints will be written.",
     )
-    parser.add_argument("--seed", type=int, default=None, help="A seed for reproducible training.")
+    parser.add_argument("--seed", type=int, default=defaults.seed, help="A seed for reproducible training.")
     parser.add_argument(
         "--resolution",
         type=int,
@@ -880,7 +880,7 @@ def main(args):
     if accelerator.is_main_process:
         accelerator.init_trackers(WANDB_PROJECT_NAME, 
                                   config=vars(args),
-                                  init_kwargs={"wandb":dict(group="lora")})
+                                  init_kwargs={"wandb":dict(job_type="training", group="dreambooth_lora")})
 
     # Train!
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
@@ -1075,7 +1075,7 @@ def main(args):
 
         # save model checkpoint to wandb Artifact
         checkpoint_file = os.path.join(args.output_dir, "pytorch_lora_weights.bin")
-        model_at = wandb.Artifact(f"{wandb.run.id}_pytorch_lora_weights", type="model")
+        model_at = wandb.Artifact(f"{wandb.run.id}_dreambooth_lora", type="model")
         model_at.add_file(checkpoint_file)
         wandb.log_artifact(model_at)
 
