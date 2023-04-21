@@ -46,3 +46,5 @@ There are multiple models trained on Anime/Cartoon/drawings out there,  this is 
 - Another sketchy blog post: https://rentry.org/59xed3
 - Another model that looks good but has bad documentation: https://huggingface.co/NoCrypt/SomethingV2 
 - A list of somewhat good Hyperparams: https://huggingface.co/khanon/lora-training/blob/main/junko/lora_chara_junko_v1c_131i9r-9i6r.json
+- A blogpost by Cloneofsimo himself: https://replicate.com/blog/lora-faster-fine-tuning-of-stable-diffusion
+- Dreambooth article: https://huggingface.co/blog/dreambooth
