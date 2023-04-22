@@ -61,6 +61,7 @@ MODEL_NAME = "runwayml/stable-diffusion-v1-5"
 OUTPUT_DIR="dreambooth_lora/dog"
 INSTANCE_DIR="dog"
 WANDB_PROJECT_NAME="ethz-hackathon"
+WANDB_TEAM=None
 
 ####################################################################
 ## You should play with these params first
@@ -881,7 +882,7 @@ def main(args):
     if accelerator.is_main_process:
         accelerator.init_trackers(WANDB_PROJECT_NAME, 
                                   config=vars(args),
-                                  init_kwargs={"wandb":dict(job_type="training", group="dreambooth_lora")})
+                                  init_kwargs={"wandb":dict(job_type="training", entity=WANDB_TEAM, group="dreambooth_lora")})
 
     # Train!
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps

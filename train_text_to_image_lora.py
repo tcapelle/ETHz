@@ -53,6 +53,7 @@ OUTPUT_DIR="lora/pokemon"
 DATASET_NAME="lambdalabs/pokemon-blip-captions"
 TRAIN_DATA_DIR=None # is this one or the dataset name
 WANDB_PROJECT_NAME="ethz-hackathon"
+WANDB_TEAM="fastai"
 
 ####################################################################
 ## You should play with these params first
@@ -680,7 +681,7 @@ def main():
     if accelerator.is_main_process:
         accelerator.init_trackers(WANDB_PROJECT_NAME, 
                                   config=vars(args),
-                                  init_kwargs={"wandb":dict(job_type="training", group="lora")})
+                                  init_kwargs={"wandb":dict(entity=WANDB_TEAM, job_type="training", group="lora")})
 
     # Train!
     total_batch_size = args.train_batch_size * accelerator.num_processes * args.gradient_accumulation_steps
