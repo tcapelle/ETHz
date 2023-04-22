@@ -53,7 +53,7 @@ OUTPUT_DIR="lora/pokemon"
 DATASET_NAME="lambdalabs/pokemon-blip-captions"
 TRAIN_DATA_DIR=None # is this one or the dataset name
 WANDB_PROJECT_NAME="ethz-hackathon"
-WANDB_TEAM="fastai"
+WANDB_TEAM=None
 
 ####################################################################
 ## You should play with these params first
