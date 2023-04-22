@@ -5,6 +5,14 @@ Welcome to the ETH Zurich Hackathon 2023, this repository contains the code and 
 - Clone this repository
 - Choose a Machine with PyTorch preinstalled on JarvisLabs.
 - Install the requirements: `pip install -r requirements.txt`
+> You will need master dev version of diffusers (we are doing bleeding edge stuff here 🤣)
+
+```bash
+git clone https://github.com/huggingface/diffusers
+cd diffusers
+pip install -e .
+```
+
 ## Creating a Dataset
 To construct a dataset you will need to download images form the internet. 
 Consider using a scraper like: 
